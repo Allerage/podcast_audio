@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podcast_audio/Controller/AudioPlayerController.dart';
+import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerBase.dart';
 import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const AudioPlayerTest(),
+          home: const DarkAudioPlayer(),
         ));
   }
 }

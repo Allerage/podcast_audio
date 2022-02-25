@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:podcast_audio/Controller/AudioPlayerController.dart';
-import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerBase.dart';
-import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerScreen.dart';
+import 'package:podcast_audio/Controller/HomePageController.dart';
+
+import 'package:podcast_audio/Screens/Home/HomePage.dart';
+
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,14 +18,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => AudioPlayerController())
+          ChangeNotifierProvider(create: (context) => AudioPlayerController()),
+          ChangeNotifierProvider(create: (context) => HomePageController())
         ],
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.green,
+            backgroundColor: Colors.black87,
           ),
-          home: const DarkAudioPlayer(),
+          home: const HomePage(),
         ));
   }
 }

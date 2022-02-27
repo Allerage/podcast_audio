@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => HomePageController())
         ],
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Dark Audio Player',
           theme: ThemeData(
             primarySwatch: Colors.green,
             backgroundColor: Colors.black87,

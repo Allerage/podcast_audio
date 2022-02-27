@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:podcast_audio/Model/SongModel.dart';
@@ -8,6 +9,49 @@ class HomePageController with ChangeNotifier {
   bool hasLoadedSongs = false;
   List<SongData> _songs = [];
   List<SongData> get songs => _songs;
+  bool isInitialized = false;
+  AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
+
+  void setupAudio(String filepath) {
+    assetsAudioPlayer.open(Playlist(audios: [Audio.file(filepath)]),
+        showNotification: false, autoStart: false);
+    isInitialized = true;
+  }
+
+  play(String filepath) async {
+    if (assetsAudioPlayer.isPlaying.value) {
+      setupAudio(filepath);
+    }
+    assetsAudioPlayer.showNotification = true;
+
+    await assetsAudioPlayer.play();
+  }
+
+  pause() async {
+    assetsAudioPlayer.showNotification = false;
+    await assetsAudioPlayer.pause();
+  }
+
+  stop() async {
+    assetsAudioPlayer.showNotification = false;
+    await assetsAudioPlayer.stop();
+  }
+
+  String formatedTime(int secTime) {
+    String getParsedTime(String time) {
+      if (time.length <= 1) return "0$time";
+      return time;
+    }
+
+    int min = secTime ~/ 60;
+    int sec = secTime % 60;
+
+    String parsedTime =
+        getParsedTime(min.toString()) + " : " + getParsedTime(sec.toString());
+
+    return parsedTime;
+  }
+
   getSongs() async {
     var status = await Permission.storage.status;
     if (!status.isGranted) {
@@ -36,6 +80,7 @@ class HomePageController with ChangeNotifier {
       print(_songs);
       print(_songs.length);
       hasLoadedSongs = true;
+      notifyListeners();
       return true;
     } else {
       return false;

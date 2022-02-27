@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:podcast_audio/Controller/HomePageController.dart';
+import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerBase.dart';
 import 'package:podcast_audio/Utils/decoration.dart';
 import 'package:provider/provider.dart';
 
@@ -53,13 +54,24 @@ class _HomePageState extends State<HomePage> {
                         String song = homepageController.songs[index].songName;
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 40,
-                            color: Colors.white,
-                            child: Text(
-                              song,
-                              style: CustomDecoration.Boogaloo(
-                                  fontsize: 12, fontcolor: Colors.green),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DarkAudioPlayer(
+                                          song: homepageController.songs[index],
+                                        )),
+                              );
+                            },
+                            child: Container(
+                              height: 40,
+                              color: Colors.white,
+                              child: Text(
+                                song,
+                                style: CustomDecoration.Boogaloo(
+                                    fontsize: 12, fontcolor: Colors.green),
+                              ),
                             ),
                           ),
                         );
@@ -82,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                       width: 150,
                       height: 50,
                       child: Text(
-                        "Allow Storage Access",
+                        "show songs",
                         style: CustomDecoration.Boogaloo(
                             fontsize: 18, fontcolor: Colors.white),
                       ),

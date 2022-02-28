@@ -14,7 +14,9 @@ class DarkAudioPlayer extends StatefulWidget {
   _DarkAudioPlayerState createState() => _DarkAudioPlayerState();
 }
 
-class _DarkAudioPlayerState extends State<DarkAudioPlayer> {
+class _DarkAudioPlayerState extends State<DarkAudioPlayer>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
   double position = 0;
   bool showGlow = true;
   double currentPostion = 0.0;
@@ -23,9 +25,22 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<HomePageController>(context, listen: false)
-        .setupAudio(widget.song.songPath);
+    HomePageController audio =
+        Provider.of<HomePageController>(context, listen: false);
+    if (!audio.assetsAudioPlayer.isPlaying.value &&
+        !(audio.playingSong == widget.song.songPath)) {
+      audio.setupAudio(widget.song.songPath);
+    }
+    _controller = AnimationController(vsync: this);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,10 +108,16 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer> {
                 child: Center(
                   child: ClipOval(
                     child: Container(
-                      color: Colors.white,
-                      width: 180,
-                      height: 180,
-                      child: Lottie.asset("assets/animations/MusicDisc.json"),
+                      width: 200,
+                      height: 200,
+                      child: Lottie.asset("assets/animations/panda.json",
+                          controller: _controller, onLoaded: (duration) {
+                        _controller.duration = duration.duration;
+                        if (controller.assetsAudioPlayer.isPlaying.value) {
+                          _controller.forward();
+                          _controller.repeat();
+                        }
+                      }),
                     ),
                   ),
                 ),
@@ -198,8 +219,11 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer> {
                             onTap: () {
                               if (isPlaying) {
                                 controller.pause();
+                                _controller.stop();
                               } else {
                                 controller.play(widget.song.songPath);
+                                _controller.forward();
+                                _controller.repeat();
                               }
                             },
                             child: Container(

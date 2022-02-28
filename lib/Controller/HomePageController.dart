@@ -8,6 +8,7 @@ import 'package:podcast_audio/Model/SongModel.dart';
 class HomePageController with ChangeNotifier {
   bool hasLoadedSongs = false;
   List<SongData> _songs = [];
+  String playingSong = "";
   List<SongData> get songs => _songs;
   bool isInitialized = false;
   AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
@@ -16,6 +17,7 @@ class HomePageController with ChangeNotifier {
     assetsAudioPlayer.open(Playlist(audios: [Audio.file(filepath)]),
         showNotification: false, autoStart: false);
     isInitialized = true;
+    playingSong = filepath;
   }
 
   play(String filepath) async {
@@ -25,6 +27,7 @@ class HomePageController with ChangeNotifier {
     assetsAudioPlayer.showNotification = true;
 
     await assetsAudioPlayer.play();
+    notifyListeners();
   }
 
   pause() async {

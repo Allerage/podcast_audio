@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:podcast_audio/Model/LyricsModel.dart';
 
 class AudioPlayerController with ChangeNotifier {
@@ -42,9 +43,7 @@ class AudioPlayerController with ChangeNotifier {
   void setupAudio() {
     assetsAudioPlayer.open(
         Playlist(audios: [
-          Audio.network(
-              "https://firebasestorage.googleapis.com/v0/b/ispeak-34f23.appspot.com/o/pdf%2F%5BMP3FY%5D%20Owl%20City%20-%20Fireflies%20(Official%20Music%20Video).mp3?alt=media&token=af4bbef8-69a1-45f9-94e0-9ddbb3ab01c4",
-              metas: Metas(title: "Test Song"))
+          Audio("assets/audios/test.mp3"),
         ]),
         showNotification: false,
         autoStart: false);

@@ -12,12 +12,17 @@ class HomePageController with ChangeNotifier {
   List<SongData> get songs => _songs;
   bool isInitialized = false;
   AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
-
+  void initplayer() {}
   void setupAudio(String filepath) {
     assetsAudioPlayer.open(Playlist(audios: [Audio.file(filepath)]),
-        showNotification: false, autoStart: false);
+        showNotification: false, autoStart: true);
+
     isInitialized = true;
     playingSong = filepath;
+  }
+
+  back() {
+    notifyListeners();
   }
 
   play(String filepath) async {
@@ -32,7 +37,9 @@ class HomePageController with ChangeNotifier {
 
   pause() async {
     assetsAudioPlayer.showNotification = false;
+    playingSong = "";
     await assetsAudioPlayer.pause();
+    notifyListeners();
   }
 
   stop() async {

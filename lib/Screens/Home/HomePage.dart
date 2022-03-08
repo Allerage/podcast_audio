@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:podcast_audio/Controller/HomePageController.dart';
 import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerBase.dart';
+import 'package:podcast_audio/Screens/AudioPlayer/AudioPlayerScreen.dart';
 import 'package:podcast_audio/Utils/decoration.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +43,49 @@ class _HomePageState extends State<HomePage> {
                   height: 100,
                   child: LottieBuilder.asset("assets/animations/panda.json"),
                 ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: 500,
+                height: 1,
+                color: Colors.green,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AudioPlayerTest()));
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.music_note,
+                      color: Colors.green,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Text("Audio Lyric(Beta)",
+                          style: CustomDecoration.Boogaloo(
+                              fontsize: 25, fontcolor: Colors.white)),
+                    ),
+                    Expanded(
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: Colors.green,
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -75,6 +119,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => DarkAudioPlayer(
+                                          index: index,
                                           song: homepageController.songs[index],
                                         )),
                               );

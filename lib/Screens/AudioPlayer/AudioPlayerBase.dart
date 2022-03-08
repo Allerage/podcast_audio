@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 
 class DarkAudioPlayer extends StatefulWidget {
   SongData song;
-  DarkAudioPlayer({Key? key, required this.song}) : super(key: key);
+  int index;
+  DarkAudioPlayer({Key? key, required this.song, required this.index})
+      : super(key: key);
 
   @override
   _DarkAudioPlayerState createState() => _DarkAudioPlayerState();
@@ -27,8 +29,7 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer>
     // TODO: implement initState
     HomePageController audio =
         Provider.of<HomePageController>(context, listen: false);
-    if (!audio.assetsAudioPlayer.isPlaying.value &&
-        !(audio.playingSong == widget.song.songPath)) {
+    if (!(audio.playingSong == widget.song.songPath)) {
       audio.setupAudio(widget.song.songPath);
     }
     _controller = AnimationController(vsync: this);
@@ -61,6 +62,7 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer>
                 padding: const EdgeInsets.only(left: 10),
                 child: InkWell(
                   onTap: () {
+                    controller.back();
                     Navigator.of(context).pop();
                   },
                   child: Container(
@@ -166,14 +168,18 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer>
                       children: [
                         InkWell(
                           onTap: () {
-                            setState(() {
-                              showGlow = false;
-                            });
-                            Future.delayed(Duration(milliseconds: 80), () {
-                              setState(() {
-                                showGlow = true;
-                              });
-                            });
+                            if (widget.index == 0) {
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DarkAudioPlayer(
+                                          index: widget.index - 1,
+                                          song: controller
+                                              .songs[widget.index - 1],
+                                        )),
+                              );
+                            }
                           },
                           child: Container(
                             width: 70,
@@ -264,39 +270,56 @@ class _DarkAudioPlayerState extends State<DarkAudioPlayer>
                             ),
                           );
                         }),
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              color: Colors.black87,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black,
-                                    offset: Offset(4, 4),
-                                    blurRadius: 10,
-                                    spreadRadius: 1),
-                                BoxShadow(
-                                    color: Colors.white,
-                                    offset: Offset(-1, -1),
-                                    blurRadius: 9,
-                                    spreadRadius: 1)
-                              ]),
-                          child: Stack(alignment: Alignment.center, children: [
-                            ClipOval(
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    border: Border.all(color: Colors.green)),
+                        InkWell(
+                          onTap: () {
+                            if (widget.index == controller.songs.length - 1) {
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DarkAudioPlayer(
+                                          index: widget.index + 1,
+                                          song: controller
+                                              .songs[widget.index + 1],
+                                        )),
+                              );
+                            }
+                          },
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(35),
+                                color: Colors.black87,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      offset: Offset(4, 4),
+                                      blurRadius: 10,
+                                      spreadRadius: 1),
+                                  BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(-1, -1),
+                                      blurRadius: 9,
+                                      spreadRadius: 1)
+                                ]),
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              ClipOval(
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      border: Border.all(color: Colors.green)),
+                                ),
                               ),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_sharp,
-                              color: Colors.white,
-                            )
-                          ]),
+                              Icon(
+                                Icons.arrow_forward_sharp,
+                                color: Colors.white,
+                              )
+                            ]),
+                          ),
                         ),
                       ],
                     )
